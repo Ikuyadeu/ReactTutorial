@@ -18,3 +18,8 @@ var CommentForm = React.createClass({
     );
   }
 });
+
+ReactDOM.render(
+  <CommentList />,
+  document.getElementById('content')
+);

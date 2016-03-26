@@ -11,3 +11,8 @@ var Comment = React.createClass({
 		);
 	}
 });
+
+ReactDOM.render(
+  <Comment />,
+  document.getElementById('content')
+);
