@@ -43,9 +43,19 @@ var CommentForm = React.createClass({
   handleTextChange: function(e) {
     this.setState({text: e.target.value})
   },
+  handleSubmit: function(e) {
+    e.prevenDefault();
+    var author = this.state.author.trim();
+    var text = this.state.text.trim();
+    if (!text || !author) {
+      return;
+    }
+    this.props.onCommentSubmit({author: author, text: text});
+    this.setState({author: '',text: ''});
+  },
   render:function() {
     return(
-      <form className="commentForm">
+      <form className="commentForm" onSubmit={this.handleSubmit}>
         <input
           type="text"
           placeholder="Your name"
@@ -78,6 +88,9 @@ var CommentBox = React.createClass({
       }.bind(this)
     });
   },
+  handleCommenSubmit: function(comment) {
+    // TODO: submit to the server and refresh the list
+  },
   getInitialState: function() {
     return {data: []};
   },
@@ -90,7 +103,7 @@ var CommentBox = React.createClass({
       <div className="commentBox">
         <h1>Comments</h1>
         <CommentList data={this.state.data}/>
-        <CommentForm />
+        <CommentForm onCommentSubmit={this.handleCommenSubmit} />
       </div>
     );
   }

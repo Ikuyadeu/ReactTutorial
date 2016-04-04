@@ -34,11 +34,40 @@ var CommentList = React.createClass({
 });
 
 var CommentForm = React.createClass({
+  getInitialState: function(){
+    return {author: '', text: ''};
+  },
+  handleAuthorChange: function(e) {
+    this.setState({author: e.target.value});
+  },
+  handleTextChange: function(e) {
+    this.setState({text: e.target.value})
+  },
+  handleSubmit: function(e) {
+    e.prevenDefault();
+    var author = this.state.author.trim();
+    var text = this.state.text.trim();
+    if (!text || !author) {
+      return;
+    }
+    // TODO: send request to the server
+    this.setState({author: '',text: ''});
+  },
   render:function() {
     return(
-      <form className="commentForm">
-        <input type="text" placeholder="Your name" />
-        <input type="text" placeholder="Say something..." />
+      <form className="commentForm" onSubmit={this.handleSubmit}>
+        <input
+          type="text"
+          placeholder="Your name"
+          value={this.state.author}
+          onChange={this.handleAuthorChange}
+        />
+        <input
+          type="text"
+          placeholder="Say something..."
+          value={this.state.text}
+          onChange={this.handleTextChange}
+        />
         <input type="submit" placeholder="Post" />
       </form>
     )
@@ -59,6 +88,9 @@ var CommentBox = React.createClass({
       }.bind(this)
     });
   },
+  handleCommenSubmit: function(comment) {
+    // TODO: submit to the server and refresh the list
+  },
   getInitialState: function() {
     return {data: []};
   },
@@ -71,7 +103,7 @@ var CommentBox = React.createClass({
       <div className="commentBox">
         <h1>Comments</h1>
         <CommentList data={this.state.data}/>
-        <CommentForm />
+        <CommentForm onCommentSubmit={this.handleCommenSubmit} />
       </div>
     );
   }
